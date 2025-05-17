@@ -2,7 +2,7 @@
 
 A smooth text animation component for Svelte applications that provides customizable character-by-character animations.
 
-![Example Animation](assets/example.gif)
+![Example Animation](https://raw.githubusercontent.com/QuarkPixel/svelte-text-animation/master/assets/example.gif)
 
 ## Installation
 
