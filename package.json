@@ -13,7 +13,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/QuarkPixel/svelte-text-animation"
+		"url": "git+https://github.com/QuarkPixel/svelte-text-animation.git"
 	},
 	"scripts": {
 		"dev": "vite dev",
