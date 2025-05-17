@@ -25,9 +25,11 @@ jobs:
         run: npm run build
 
       - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
-          path: 'build/'
+          name: github-pages
+          path: build/
+          if-no-files-found: error
 
   deploy:
     needs: build_site
