@@ -1,6 +1,6 @@
 # Text Animation Component
 
-A smooth text animation component for Svelte applications that provides customizable character-by-character animations.
+A smooth text animation component for Svelte applications that provides customizable character-by-character animations with optimized performance.
 
 ![Example Animation](https://raw.githubusercontent.com/QuarkPixel/svelte-text-animation/master/assets/example.gif)
 
@@ -14,7 +14,7 @@ npm install svelte-text-animation
 
 ```svelte
 <script>
-import TextAnimation from 'svelte-text-animation';
+import { TextAnimation, map } from 'svelte-text-animation';
 import { Tween } from 'svelte/motion';
 
 let progress = new Tween(0);
@@ -27,7 +27,7 @@ const animate = () => {
 <TextAnimation
     text="Hello World"
     progress={progress.current}
-    styleCallback={(i) => `font-weight: ${200 + i * 700}`}
+    styleCallback={(i) => `font-weight: ${map(i, 200, 900)}`}
 />
 ```
 
@@ -48,7 +48,7 @@ const animate = () => {
 <TextAnimation
     text="Dynamic Weight"
     progress={progress}
-    styleCallback={(i) => `font-weight: ${200 + i * 700}`}
+    styleCallback={(i) => `font-weight: ${map(i, 200, 900)}`}
 />
 ```
 
@@ -61,12 +61,12 @@ const animate = () => {
 />
 ```
 
-### Advanced Variable Font Animation
+### Advanced Variable Font Animation with Optimized Performance
 ```svelte
 <script>
 import { Tween } from 'svelte/motion';
 import { cubicInOut } from 'svelte/easing';
-import TextAnimation from 'svelte-text-animation';
+import TextAnimation, { map } from 'svelte-text-animation';
 
 const progress = new Tween(0, { 
     duration: 3800, 
@@ -86,8 +86,8 @@ setInterval(() => (progress.target = progress.target == 0 ? 1 : 0), 4300);
     progress={progress.current}
     spread={5}
     styleCallback={(intensity) => `
-        font-size: ${5 - intensity}rem;
-        font-variation-settings: "YEAR" ${1979 + intensity * 61};
+        font-size: ${map(intensity, 5, 4)}rem;
+        font-variation-settings: "YEAR" ${map(intensity, 1979, 2040)};
     `}
 />
 
@@ -100,6 +100,14 @@ setInterval(() => (progress.target = progress.target == 0 ? 1 : 0), 4300);
     }
 </style>
 ```
+
+## Features
+
+- Optimized performance with edge decay function for smooth animations
+- Efficient effect calculation with intensity thresholds
+- Built-in `map` utility function for value interpolation
+- Automatic handling of non-space characters for better display
+- Svelte 5.0.0 compatible
 
 ## Requirements
 
