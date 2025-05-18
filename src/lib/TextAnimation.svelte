@@ -42,11 +42,18 @@
 	 * @param spread - Effect spread range
 	 */
 	function generateEffectArray(length: number, progress: number, spread: number): number[] {
+		// 使用边缘衰减函数，让效果在接近 0 和 1 时平滑衰减
+		const edgeFactor = 4 * progress * (1 - progress);
+
+		if (edgeFactor <= 0) {
+			return Array(length).fill(0);
+		}
+
 		const offset = progress * (length + 2 * spread + 1) - spread - 1;
+		// const offset = progress * length;
 		const gaussianLikeFunction = (x: number): number => {
 			const z = (x - offset) / spread;
-			return Math.exp(-1.6 * z * z);
-			// return Math.abs(z) > 1 ? 0 : Math.exp(-1.6 * z * z);
+			return Math.exp(-1 * z * z) * edgeFactor;
 		};
 
 		return Array.from({ length }, (_, i) => gaussianLikeFunction(i));
@@ -57,6 +64,14 @@
 
 <div {...rest}>
 	{#each text.split('') as char, i (i)}
-		<span class={innerClassName} style={styleCallback(effectArray[i])}>{char}</span>
+			<span class={[innerClassName, char !== " " ? "alphanumeric" : '']}
+						style={styleCallback(effectArray[i])}>{char}</span>
 	{/each}
 </div>
+
+<style>
+    .alphanumeric {
+        display: inline-block;
+
+    }
+</style>
