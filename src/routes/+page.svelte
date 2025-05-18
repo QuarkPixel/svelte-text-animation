@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tween } from 'svelte/motion';
-	import TextAnimation from '$lib/TextAnimation.svelte';
+	import { TextAnimation, map } from '$lib/index.js';
 	import { cubicInOut } from 'svelte/easing';
 
 	const DURATION = 3800;
@@ -12,21 +12,22 @@
 		className: string;
 		styleCallback: (intensity: number) => string;
 		spread?: number;
+		innerClassName?: string;
 	}[] = [
 		{
 			text: 'Made by Xuancong Meng!',
 			className: 'climate-crisis',
 			styleCallback: (intensity: number): string => `
-				font-size: ${5 - intensity}rem;
-				font-variation-settings: "YEAR" ${1979 + intensity * 61};
+				font-size: ${map(intensity, 5, 4)}rem;
+				font-variation-settings: "YEAR" ${map(intensity, 1979, 2040)};
 			`
 		},
 		{
 			text: 'Svelte Text Animation',
 			className: 'anybody',
 			styleCallback: (intensity: number): string => `
-				font-weight: ${100 + intensity * 800};
-				font-variation-settings: "wdth" ${150 - intensity * 70};
+				font-weight: ${map(intensity, 100, 900)};
+				font-variation-settings: "wdth" ${map(intensity, 150, 80)};
 			`,
 			spread: 5
 		},
@@ -34,14 +35,16 @@
 			text: 'the Cake is a Lie',
 			className: 'anybody',
 			styleCallback: (intensity: number): string => `
-				font-weight: ${900 - intensity * 800};
-				font-variation-settings: "wdth" ${80 + intensity * 70};
+				font-weight: ${map(intensity, 900, 100)};
+				font-variation-settings: "wdth" ${map(intensity, 80, 150)};
+				--height: ${map(intensity, 0, 100)}%;
 			`,
-			spread: 5
+			innerClassName: 'wave',
 		}
 	];
 
 	progress.target = 1;
+
 	setInterval(() => (progress.target = progress.target == 0 ? 1 : 0), DURATION + 500);
 </script>
 
@@ -55,10 +58,11 @@
 />
 
 <div class="text">
-	{#each examples as { text, className, styleCallback, spread }, i (i)}
-		<TextAnimation class={className} {text} progress={progress.current} {styleCallback} {spread} />
+	{#each examples as { text, className, styleCallback, spread, innerClassName }, i (i)}
+		<TextAnimation class={className} {text} progress={progress.current} {styleCallback} {spread} {innerClassName} />
 	{/each}
 </div>
+
 
 <style>
     .text {
@@ -67,7 +71,6 @@
         flex-direction: column;
         align-items: center;
         height: 100vh;
-        user-select: none;
         font-size: 5rem;
     }
 
@@ -82,6 +85,23 @@
         font-family: 'Anybody', sans-serif;
         font-optical-sizing: auto;
         font-style: normal;
+    }
+
+    :global(.wave) {
+        position: relative;
+				display: inline-block;
+				min-width: 20px;
+
+        &::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: var(--height, 0);
+            position: absolute;
+            top: calc(100% - var(--height, 0));
+            background-color: #0003;
+            backdrop-filter: invert(1);
+        }
     }
 
     :global(*) {
