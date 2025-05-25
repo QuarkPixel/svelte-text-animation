@@ -4,6 +4,8 @@ A smooth text animation component for Svelte applications that provides customiz
 
 ![Example Animation](https://raw.githubusercontent.com/QuarkPixel/svelte-text-animation/master/assets/example.gif)
 
+You can check out the [Demo](https://svelte.dev/playground/434018293cfb415b925f19b47ef4a85c?version=5.33.1) in a Svelte Playground!
+
 ## Installation
 
 ```bash
