@@ -16,6 +16,11 @@
 		 */
 		spread?: number;
 		/**
+		 * Controls the flatness of the edge decay curve. Higher values make the curve flatter in the middle, keeping the effect intensity closer to 1 for a larger range of progress. Must be an integer >= 2.
+		 * @default 5
+		 */
+		edgeFlatness?: number;
+		/**
 		 * Callback function to generate style string for each character
 		 * @param intensity - Value between 0 and 1 indicating effect strength
 		 */
@@ -30,6 +35,7 @@
 		text,
 		progress,
 		spread = 3,
+		edgeFlatness = 5,
 		styleCallback,
 		innerClassName = '',
 		...rest
@@ -40,22 +46,23 @@
 	 * @param length - Number of characters
 	 * @param progress - Current animation progress (0-1)
 	 * @param spread - Effect spread range
+	 * @param flatness - Flatness of the edge decay curve (higher values make the curve flatter)
 	 */
-	function generateEffectArray(length: number, progress: number, spread: number): number[] {
+	function generateEffectArray(length: number, progress: number, spread: number, flatness: number): number[] {
 		// Use edge decay function for smooth fade near 0 and 1
-		const edgeFactor = 4 * progress * (1 - progress);
+		const edgeFactor = 1 - Math.pow((2 * progress) - 1, 2 * flatness);
 
 		const result = new Array(length).fill(0);
 
-		if (edgeFactor <= 0.001) {
+		if (edgeFactor <= 0) {
 			return result;
 		}
 
 		const offset = progress * (length + 2 * spread + 1) - spread - 1;
-		
+
 		const startIdx = Math.max(0, Math.floor(offset - spread * 3));
 		const endIdx = Math.min(length - 1, Math.ceil(offset + spread * 3));
-		
+
 		for (let i = startIdx; i <= endIdx; i++) {
 			const z = (i - offset) / spread;
 			const zSquared = z * z;
@@ -68,7 +75,8 @@
 
 		return result;
 	}
-	const effectArray = $derived(generateEffectArray(text.length, progress, spread));
+
+	const effectArray = $derived(generateEffectArray(text.length, progress, spread, edgeFlatness));
 </script>
 
 <div {...rest}>
@@ -81,6 +89,5 @@
 <style>
     .alphanumeric {
         display: inline-block;
-
     }
 </style>

@@ -41,6 +41,7 @@ const animate = () => {
 | progress | number | required | Animation progress (0-1) |
 | styleCallback | function | required | Style generator function |
 | spread | number | 3 | Number of characters affected on each side |
+| edgeFlatness | number | 5 | Controls the flatness of the edge decay curve. Higher values make the curve flatter in the middle, keeping the effect intensity closer to 1 for a larger range. Must be an integer >= 2. |
 | innerClassName | string | "" | CSS class for character spans |
 
 ## Examples
@@ -87,6 +88,7 @@ setInterval(() => (progress.target = progress.target == 0 ? 1 : 0), 4300);
     className="climate-crisis"
     progress={progress.current}
     spread={5}
+    edgeFlatness={5}
     styleCallback={(intensity) => `
         font-size: ${map(intensity, 5, 4)}rem;
         font-variation-settings: "YEAR" ${map(intensity, 1979, 2040)};
@@ -106,6 +108,7 @@ setInterval(() => (progress.target = progress.target == 0 ? 1 : 0), 4300);
 ## Features
 
 - Optimized performance with edge decay function for smooth animations
+- Configurable curve flatness for customizable animation profiles
 - Efficient effect calculation with intensity thresholds
 - Built-in `map` utility function for value interpolation
 - Automatic handling of non-space characters for better display
