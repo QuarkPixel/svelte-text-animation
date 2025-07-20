@@ -11,7 +11,7 @@ const config = {
 			assets: 'build',
 			fallback: null,
 			precompress: false,
-			strict: true
+			strict: false,
 		}),
 		paths: {
 			base: '/svelte-text-animation'
